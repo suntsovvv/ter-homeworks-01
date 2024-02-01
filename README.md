@@ -1,4 +1,5 @@
 # Домашнее задание к занятию «Введение в Terraform»
+### 1.
 ```
 root@study:/terraform# terraform version
 
@@ -51,3 +52,11 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 root@study:/home/user/home_work/ter-homeworks/01/src# 
 ```
+### 2.  
+ В каком terraform-файле, согласно этому .gitignore, допустимо сохранить личную, секретную информацию?  
+ .tfstate
+### 3.
+o6PchJA3Vv0oDEZY  
+### 4.  
+
+ 
