@@ -62,5 +62,10 @@ o6PchJA3Vv0oDEZY
 **resource "docker_container" "1nginx" {**  - Ошибка в уникальном имени ресурса, оно должно начинаться с буквы или подчеркивания, а не с цыфры как в нашем случае.  
 **name  = "example_${random_password.random_string_FAKE.resulT}"** - Неверная ссылка на ресурс, такого  не существует, так же верно указан параметр resulT,такой не существует.
 ### 5.
-
- 
+```
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+root@study:/home/user/home_work/ter-homeworks/01/src# docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                  NAMES
+3c5e2ba22ff6   a8758716bb6a   "/docker-entrypoint.…"   6 minutes ago   Up 6 minutes   0.0.0.0:9090->80/tcp   example_o6PchJA3Vv0oDEZY
+root@study:/home/user/home_work/ter-homeworks/01/src# 
+```
