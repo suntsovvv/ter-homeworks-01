@@ -95,6 +95,27 @@ root@study:/home/user/home_work/ter-homeworks/01/src#
 ```
 Ключ -auto-approve применяет новый план(изменение в иннфаструктуре) без запроса подтверждения.
 Опасность применения ключа -auto-approve, если с проектом работает еще кто-то, мы можем не знать об изменениях внесенных не нами.
-Предполагаю, что использоваться может для автоматизации развертывания, например через скрипт. Возможно в случае факапа когда простой системы очень критичен, для ускорения процедуры развертывания.  
+Предполагаю, что использоваться может для автоматизации развертывания, например через скрипт. Для ускорения процедуры развертывания, разумеется не для критичной инфраструктуры.
 
 ### 7. 
+```
+root@study:/home/user/home_work/ter-homeworks/01/src# terraform destroy
+
+Destroy complete! Resources: 3 destroyed.
+```
+Файл terraform.tfstate :
+```hcl
+{
+  "version": 4,
+  "terraform_version": "1.5.0",
+  "serial": 14,
+  "lineage": "93f52775-e00b-a601-82fc-361e9df98be1",
+  "outputs": {},
+  "resources": [],
+  "check_results": null
+}
+```
+### 8.
+Контейнер не удалился потому, чтов аргументах для создания ресурса "docker_image" был использован параметр keep_locally = true.  
+
+**keep_locally** (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker local storage on destroy operation.
