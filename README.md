@@ -58,5 +58,9 @@ root@study:/home/user/home_work/ter-homeworks/01/src#
 ### 3.
 o6PchJA3Vv0oDEZY  
 ### 4.  
+**resource "docker_image" {**  - Не задано уникальное имя для ресурса.  
+**resource "docker_container" "1nginx" {**  - Ошибка в уникальном имени ресурса, оно должно начинаться с буквы или подчеркивания, а не с цыфры как в нашем случае.  
+**name  = "example_${random_password.random_string_FAKE.resulT}"** - Неверная ссылка на ресурс, такого  не существует, так же верно указан параметр resulT,такой не существует.
+### 5.
 
  
