@@ -119,3 +119,95 @@ Destroy complete! Resources: 3 destroyed.
 Контейнер не удалился потому, чтов аргументах для создания ресурса "docker_image" был использован параметр keep_locally = true.  
 
 **keep_locally** (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker local storage on destroy operation.
+
+#Задание 2*
+
+```hcl
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.1"
+        
+          }
+  }
+  required_version = ">=0.13" 
+}
+
+provider "docker" {
+    host  = "ssh://user@158.160.142.194:22"
+    #ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+}
+
+resource "docker_volume" "db_data" {
+    name = "db_data"
+
+}
+resource "random_password" "mysql_root_password" {
+  length = 8
+}
+
+resource "random_password" "mysql_password" {
+  length = 8
+}
+
+resource "docker_image" "mysql" {
+  name = "mysql:8"
+  keep_locally = true
+ }
+
+resource "docker_container" "mysql" {
+   name  = "mysql"
+   image = docker_image.mysql.image_id
+   
+    env =  [
+         "MYSQL_ROOT_PASSWORD = ${random_password.mysql_root_password.result}",
+         "MYSQL_PASSWORD = ${random_password.mysql_password.result}",
+         "MYSQL_ROOT_HOST = %" ,
+         "MYSQL_DATABASE = wordpress",
+         "MYSQL_USER = wordpress"
+    ]
+    restart = "always"   
+   mounts {
+    source = "db_data"
+    target = "/var/lib/mysql"
+    type = "volume" 
+  }
+
+  ports {
+    internal = 3306
+    external = 3306
+  }
+}
+```
+контейнер на удаленной машине поднимается, но постоянно в ребуте, как будто не передаются env:
+```
+Команда  docker logs mysql выдает:
+```
+2024-02-11 02:05:08+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.3.0-1.el8 started.
+2024-02-11 02:05:08+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2024-02-11 02:05:08+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.3.0-1.el8 started.
+2024-02-11 02:05:08+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
+    You need to specify one of the following as an environment variable:
+    - MYSQL_ROOT_PASSWORD
+    - MYSQL_ALLOW_EMPTY_PASSWORD
+    - MYSQL_RANDOM_ROOT_PASSWORD
+```
+В файле terraform.tfstate вроде как они есть:
+
+```
+     "entrypoint": [
+              "docker-entrypoint.sh"
+            ],
+            "env": [
+              "MYSQL_DATABASE = wordpress",
+              "MYSQL_PASSWORD = y\u003eLduI!m",
+              "MYSQL_ROOT_HOST = %",
+              "MYSQL_ROOT_PASSWORD = nRer)vtB",
+              "MYSQL_USER = wordpress"
+            ],
+            "exit_code": null,
+```
+
+
+Не могу понять где ошибка, с локальным докером ситуация аналогичная.
